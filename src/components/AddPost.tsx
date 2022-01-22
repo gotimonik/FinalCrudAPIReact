@@ -6,6 +6,9 @@ import { makeStyles } from "@mui/styles";
 import { useDispatch } from "react-redux";
 import { addPost } from "../redux/actions";
 import { useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+
 interface PropsTypes {
   title: string;
   body: string;
@@ -32,34 +35,21 @@ const useStyle = makeStyles({
 });
 
 const AddPost = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<PropsTypes>();
   // const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const clasess = useStyle();
   // Insert Employees With API
 
-  const [post, setPost] = useState<PropsTypes>({
-    title: "",
-    body: "",
-  });
-
-  // Get Value From TextField And Set into The State
-
-  function GetDatafromField(e: React.ChangeEvent<HTMLInputElement>) {
-    setPost({
-      ...post,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  // Form Submit
-
-  const OnFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(addPost({ ...post }));
+  const onSubmit: SubmitHandler<PropsTypes> = (data) => {
+    dispatch(addPost({ title: data.title, body: data.body }));
     navigate("/");
   };
-
   return (
     <>
       <Grid container px={2} mt={2}>
@@ -67,7 +57,7 @@ const AddPost = () => {
           <Box textAlign="center" p={2} mb={2} className={clasess.addStuColor}>
             <Typography variant="h4">Add Post</Typography>
           </Box>
-          <form noValidate onSubmit={OnFormSubmit}>
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -75,10 +65,11 @@ const AddPost = () => {
                   id="title"
                   required
                   autoFocus
-                  name="title"
                   autoComplete="Tiel"
                   fullWidth
-                  onChange={GetDatafromField}
+                  {...register("title", { required: "Title is required." })}
+                  error={Boolean(errors.title)}
+                  helperText={errors.title?.message}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -87,9 +78,10 @@ const AddPost = () => {
                   label="Body"
                   id="body"
                   required
-                  name="body"
+                  {...register("body", { required: "Body is required." })}
                   autoComplete="Body"
-                  onChange={GetDatafromField}
+                  error={Boolean(errors.body)}
+                  helperText={errors.body?.message}
                 />
               </Grid>
             </Grid>
