@@ -102,11 +102,14 @@ const EditPost = () => {
               </Button>
             </Box>
             <Box m={3}>
-              <Link to="/">
-                <Button type="button" variant="contained" fullWidth>
-                  Back To Home
-                </Button>
-              </Link>
+              <Button
+                type="button"
+                variant="contained"
+                fullWidth
+                onClick={() => navigate("/")}
+              >
+                Back To Home
+              </Button>
             </Box>
           </form>
         </Grid>
