@@ -5,7 +5,7 @@ import { deepPurple, green, orange } from "@mui/material/colors";
 import { makeStyles } from "@mui/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostById, updatePost } from "../redux/actions";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Post, Store } from "../models/redux";
 

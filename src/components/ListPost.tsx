@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Box,
   Typography,
@@ -17,9 +17,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deepPurple, green, orange } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
-import { deletePost, getAllPosts, setPost } from "../redux/actions";
+import { deletePost, setPost } from "../redux/actions";
 import { Post, Store } from "../models/redux";
 import { useNavigate } from "react-router-dom";
+import Loading from "./StyledLoading";
 const useStyle = makeStyles({
   headingColor: {
     backgroundColor: deepPurple[400],
@@ -45,7 +46,7 @@ const ListPost = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { posts } = useSelector((state: Store) => state.post);
+  const { posts, loading } = useSelector((state: Store) => state.post);
 
   const handleDelete = (id: number) => {
     if (window.confirm("Are You Sure You Want To Delete?")) {
@@ -55,9 +56,10 @@ const ListPost = () => {
 
   const handleEdit = (post: Post) => {
     dispatch(setPost(post));
-    navigate(`post/edit/${post.id}`);
+    navigate(`posts/edit/${post.id}`);
   };
 
+  if (loading) return <Loading />;
   if (!posts.length) return <></>;
   return (
     <>
